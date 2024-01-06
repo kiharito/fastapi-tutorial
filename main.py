@@ -1,6 +1,6 @@
 from enum import Enum
 from typing import Union
-from fastapi import FastAPI, Query
+from fastapi import FastAPI, Path, Query
 from pydantic import BaseModel
 
 
@@ -43,7 +43,8 @@ async def create_item(item: Item):
 
 
 @app.get("/items/{item_id}")
-async def read_item(item_id: str, q: Union[str, None] = None, short: bool = False):
+async def read_item(item_id: int = Path(title="The ID of the item to get", ge=1), q: Union[str, None] = None,
+                    short: bool = False):
     item = {"item_id": item_id}
     if q:
         return item.update({"q": q})
