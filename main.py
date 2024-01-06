@@ -2,6 +2,7 @@ from enum import Enum
 from typing import Union
 from fastapi import FastAPI, Path, Query
 from pydantic import BaseModel
+from fastapi.testclient import TestClient
 
 
 class Item(BaseModel):
@@ -62,3 +63,12 @@ async def get_model(model_name: ModelName):
         return {"model_name": model_name, "message": "LeCNN all the images"}
 
     return {"model_name": model_name, "message": "Have some residuals"}
+
+
+client = TestClient(app)
+
+
+def test_root():
+    response = client.get("/")
+    assert response.status_code == 200
+    assert response.json() == {"message": "Hello World"}
